@@ -60,15 +60,31 @@ export default class OrderComponent {
   register = (req, res) => {
     const { UUID } = req.user;
     const data = req.body
+    let warnMessage
+
+    if(req.body.pickup == ""){
+      warnMessage = "픽업을 원하는 날짜와 시간을 입력해주세요."
+    }
+
+    if(req.body.delivery == ""){
+      warnMessage = "배달을 원하는 날짜와 시간을 입력해주세요."
+    }
+
+    if(req.body.address_01 == ""){
+      warnMessage = "주소를 입력해주세요.";
+    }
+    
+    if(req.body.address_01 == ""){
+      warnMessage = "상세 주소를 입력해주세요."
+    }
+
+    console.log(warnMessage)
 
     let result = this.getService().insertOrder(UUID, data)
     res.status(201).json(result)
-    //TODO API 셋팅 해주세요
-    /******************************/
-    /**
-     * @example
-     * https://s3.ap-northeast-2.amazonaws.com/com.washswat.assets/dev/rn.json
-     */
+    
+
+    
   }
 
 }
