@@ -1,6 +1,6 @@
 import { database } from '../../libs/database';
 export default class Dao {
-  tableName = 'Tb_User';
+  tableName = 'user';
   constructor () {
     try {
       let result = database.prepare(`SELECT * FROM ${this.tableName}`).all();
@@ -9,6 +9,7 @@ export default class Dao {
       this.createTable();
     }
   }
+  
   createTable = () => {
     let sql = `DROP TABLE IF EXISTS ${this.tableName};`;
     database.exec(sql);
@@ -26,6 +27,7 @@ export default class Dao {
     let result = queue.get(phone);
     return result;
   }
+
   findUserByUUID = (UUID) => {
     let queue = database.prepare(`SELECT * FROM ${this.tableName} WHERE UUID = ?;`);
     let result = queue.get(UUID);

@@ -34,3 +34,6 @@ DB구조는 sqlite를 사용해야 하므로 RDB를 이용하려고 합니다.
 # API Specifications
 API 명세서는 Postman과 같은 강력한 툴을 사용하더라도 매 번 갱신한다는 일이 쉽지 않습니다.
 이에 Swagger와 같은 자동 문서화가 되는 라이브러리를 사용하여 매 번 최신화된 명세서를 전달하려고 합니다.
+
+
+better-sql3는 완전 동기화이므로 rdb를 쓰게 된다면 mysql2 등의 모듈을 통해 promise 비동기화를 진행할 것 같다.

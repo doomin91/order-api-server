@@ -3,12 +3,12 @@ import successWrapper from '../../libs/success';
 import BadRequestException from '../../exceptions/badRequestException';
 import { signing } from '../../middlewares/auth';
 
-import UserService from './service';
+import OrderService from './service';
 import Dao from './dao';
 
-export default class UserComponent {
+export default class OrderComponent {
   router = Router();
-  service = new UserService(new Dao());
+  service = new OrderService(new Dao());
 
   getService(){
     return this.service;
@@ -24,7 +24,6 @@ export default class UserComponent {
     .get('/', successWrapper(this.orderList))
     .get('/:taskId', successWrapper(this.findOrder))
     .post('/', successWrapper(this.register))
-    // .get('/me', successWrapper(this.me))
     this.router.use(path, router);
   }
 
@@ -32,7 +31,7 @@ export default class UserComponent {
    * @description 고객의 주문 리스트를 가져온다.
    */
   orderList = (req,res) => {
-    const { UUID } = req.user;
+    const { UUID } = req.Order;
     return UUID
     //TODO API 셋팅 해주세요
     /**
@@ -45,7 +44,7 @@ export default class UserComponent {
    * @description taskId로 주문을 가져온다.
    */
   findOrder = (req,res) => {
-    const { UUID } = req.user;
+    const { UUID } = req.Order;
     const { taskId } = req.params;
     //TODO API 셋팅 해주세요
     /******************************/
@@ -58,8 +57,12 @@ export default class UserComponent {
   /**
    * @description 주문을 등록한다.
    */
-  register = (req,res) => {
+  register = (req, res) => {
     const { UUID } = req.user;
+    const data = req.body
+
+    let result = this.getService().insertOrder(UUID, data)
+    res.status(201).json(result)
     //TODO API 셋팅 해주세요
     /******************************/
     /**
