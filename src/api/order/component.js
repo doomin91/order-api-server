@@ -33,6 +33,7 @@ export default class UserComponent {
    */
   orderList = (req,res) => {
     const { UUID } = req.user;
+    return UUID
     //TODO API 셋팅 해주세요
     /**
      * @example
