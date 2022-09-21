@@ -23,7 +23,7 @@ class App {
 
     // 현재 인증의 문제점은 미리 발급된 x-access-token 형태의 Token을 가지고 모든 기능을 무제한 이용 할 수 있다는 점이다.
     // 발급된 토큰을 어떻게 보관하고 인증 할 것인지, 갱신의 주기는 어떻게 할 것인지, DB에 보관해야 할 것인지에 대한 고려가 필요해보인다.
-    // this.app.use(verifyJWT)
+    this.app.use(verifyJWT)
   }
 
   initializeErrorHandling() {

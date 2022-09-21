@@ -2,12 +2,11 @@ import { database } from '../../libs/database';
 export default class Dao {
   tableName = 'order';
   constructor () {
-
+    let isTable
     try {
       let result = database.prepare(`SELECT * FROM ${this.tableName}_information`).all();
     } catch (e) {
       /** 테이블 존재하지 않음 **/
-      console.log(result)
       this.createOrderTable();
       
     }

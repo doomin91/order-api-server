@@ -1,10 +1,44 @@
 paths:
   /api/order/:
     post:
-      summary: "주문 등록하기"
-      description: "주문 등록하기"
       tags:
         - order
+      summary: "주문 등록하기"
+      description: "주문 등록하기"
+      parameters:
+        - name: x-access-token
+          in: header
+          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
+          description: Access Token
+          required: true
+          schema:
+            type: string
+        - name: requestBody
+          required: true
+          in: body
+          schema:
+            type: object
+            required:
+              - pickup
+              - pickupEnd
+              - delivery
+              - deliveryEnd
+              - address_01
+            properties:
+              pickup:
+                type: string
+              pickupEnd:
+                type: string
+              delivery:
+                type: string
+              deliveryEnd:
+                type: string
+              address_01:
+                type: string
+              address_02:
+                type: string
+              location:
+                type: string
       responses:
         '200':
           description: Response
@@ -18,6 +52,14 @@ paths:
     get:
       summary: "주문 리스트 가져오기"
       description: "주문 리스트 가져오기"
+      parameters:
+        - name: x-access-token
+          in: header
+          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
+          description: Access Token
+          required: true
+          schema:
+            type: string
       tags:
         - order
       responses:
@@ -34,6 +76,19 @@ paths:
     get:
       summary: "taskId에 해당하는 주문 리스트 가져오기"
       description: "taskId에 해당하는 주문 리스트 가져오기"
+      parameters:
+        - name: x-access-token
+          in: header
+          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
+          description: Access Token
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
       tags:
         - order
       responses:
@@ -49,6 +104,19 @@ paths:
     delete:
       summary: "주문 삭제하기"
       description: "주문 삭제하기"
+      parameters:
+        - name: x-access-token
+          in: header
+          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
+          description: Access Token
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
       tags:
         - order
       responses:

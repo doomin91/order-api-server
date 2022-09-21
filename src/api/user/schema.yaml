@@ -1,15 +1,27 @@
 paths:
   /api/user/:
     post:
-      summary: "회원정보 인증하기"
-      description: "회원정보 인증하기"
       tags:
         - user
-      required:
-        - phone
-      properties:
-        phone:
-          type: string
+      summary: "회원정보 인증하기"
+      parameters:
+        - name: x-access-token
+          in: header
+          description: Access Token
+          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
+          required: true
+          schema:
+            type: string
+        - name: requestBody
+          required: true
+          in: body
+          schema:
+            type: object
+            required:
+              - phone
+            properties:
+              phone:
+                type: string
       responses:
         '200':
           description: Response
@@ -23,10 +35,18 @@ paths:
 
   /api/user/me:
     get:
-      summary: "내 정보"
-      description: "내 정보"
       tags:
         - user
+      summary: "내 정보"
+      description: "내 정보"
+      parameters:
+        - name: x-access-token
+          in: header
+          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
+          description: Access Token
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Response

@@ -27,6 +27,7 @@ export default class UserComponent {
   }
   signUp = (req,res) => {
     const { phone } = req.body;
+    console.log(req.body)
     if(!phone){
       throw new BadRequestException('전화번호를 알려주세요');
     }

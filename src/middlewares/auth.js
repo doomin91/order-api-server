@@ -1,24 +1,24 @@
 import InvalidAuthorizedTokenError from '../exceptions/invalidAuthorizedTokenException';
 import { verify, sign } from '../libs/jwt.js';
 const bypassPathList = ['/login', '/', 
-      // '/api-docs', 
-      // '/api-docs/', 
-      // '/api-docs/swagger-ui.css',
-      // '/api-docs/swagger-ui-bundle.js',
-      // '/api-docs/swagger-ui-standalone-preset.js',
-      // '/api-docs/swagger-ui-init.js',
-      // '/api-docs/swagger-ui-bundle.js',
-      // '/api-docs/swagger-ui-standalone-preset.js',
-      // '/api-docs/swagger-ui-init.js',
-      // '/api-docs/favicon-32x32.png',
-      // '/api-docs/favicon-16x16.png',
-      // '/api-docs/swagger-ui.css',
-      // '/api-docs/swagger-ui-bundle.js',
-      // '/api-docs/swagger-ui-standalone-preset.js',
-      // '/api-docs/swagger-ui-init.js',
-      // '/api-docs/swagger-ui-bundle.js',
-      // '/api-docs/favicon-32x32.png',
-      // '/api-docs/favicon-16x16.png'
+      '/api-docs', 
+      '/api-docs/', 
+      '/api-docs/swagger-ui.css',
+      '/api-docs/swagger-ui-bundle.js',
+      '/api-docs/swagger-ui-standalone-preset.js',
+      '/api-docs/swagger-ui-init.js',
+      '/api-docs/swagger-ui-bundle.js',
+      '/api-docs/swagger-ui-standalone-preset.js',
+      '/api-docs/swagger-ui-init.js',
+      '/api-docs/favicon-32x32.png',
+      '/api-docs/favicon-16x16.png',
+      '/api-docs/swagger-ui.css',
+      '/api-docs/swagger-ui-bundle.js',
+      '/api-docs/swagger-ui-standalone-preset.js',
+      '/api-docs/swagger-ui-init.js',
+      '/api-docs/swagger-ui-bundle.js',
+      '/api-docs/favicon-32x32.png',
+      '/api-docs/favicon-16x16.png'
     ]
 
 export const verifyJWT = (req, res, next) => {
