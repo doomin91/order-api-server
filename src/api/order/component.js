@@ -82,9 +82,6 @@ export default class OrderComponent {
 
     let result = this.getService().insertOrder(UUID, data)
     res.status(201).json(result)
-    
-
-    
   }
 
 }

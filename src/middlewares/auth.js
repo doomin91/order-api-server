@@ -1,8 +1,28 @@
 import InvalidAuthorizedTokenError from '../exceptions/invalidAuthorizedTokenException';
 import { verify, sign } from '../libs/jwt.js';
-const bypassPathList = ['/login', '/'];
+const bypassPathList = ['/login', '/', 
+      // '/api-docs', 
+      // '/api-docs/', 
+      // '/api-docs/swagger-ui.css',
+      // '/api-docs/swagger-ui-bundle.js',
+      // '/api-docs/swagger-ui-standalone-preset.js',
+      // '/api-docs/swagger-ui-init.js',
+      // '/api-docs/swagger-ui-bundle.js',
+      // '/api-docs/swagger-ui-standalone-preset.js',
+      // '/api-docs/swagger-ui-init.js',
+      // '/api-docs/favicon-32x32.png',
+      // '/api-docs/favicon-16x16.png',
+      // '/api-docs/swagger-ui.css',
+      // '/api-docs/swagger-ui-bundle.js',
+      // '/api-docs/swagger-ui-standalone-preset.js',
+      // '/api-docs/swagger-ui-init.js',
+      // '/api-docs/swagger-ui-bundle.js',
+      // '/api-docs/favicon-32x32.png',
+      // '/api-docs/favicon-16x16.png'
+    ]
+
 export const verifyJWT = (req, res, next) => {
-  const bearerToken = req.headers['x-access-token'];
+  const bearerToken = req.headers['x-access-token'];  
   try {
     if (bearerToken) {
       const token = bearerToken.replace(/^Bearer /, '');
@@ -15,6 +35,7 @@ export const verifyJWT = (req, res, next) => {
       const { path } = req;
       const found = bypassPathList.find((p) => p === path);
       if (!found) {
+        console.log(path)
         throw new Error();
       }
     }

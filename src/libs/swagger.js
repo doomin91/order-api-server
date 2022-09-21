@@ -5,9 +5,9 @@ const options = {
   swaggerDefinition: {
     info: {
       version: "1.0.0",
-      title: "WashSwat 상품관리 API",
+      title: "TEST",
       description:
-        "Description : WashSwat 상품관리 API",
+        "Description : TEST",
     },
     servers: [
       {
@@ -15,7 +15,7 @@ const options = {
       },
     ],
   },
-  apis: ["./api/*.js", "./api/user/*.js", "./api/order/*.js"], //Swagger 파일 연동
+  apis: [`./src/routes/user.js`, './src/api/**/*.yaml'], //Swagger 파일 연동
 }
 const specs = swaggerJsdoc(options)
 

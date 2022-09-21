@@ -1,0 +1,63 @@
+paths:
+  /api/order/:
+    post:
+      summary: "주문 등록하기"
+      description: "주문 등록하기"
+      tags:
+        - order
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+    get:
+      summary: "주문 리스트 가져오기"
+      description: "주문 리스트 가져오기"
+      tags:
+        - order
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+  /api/order/{taskId}:
+    get:
+      summary: "taskId에 해당하는 주문 리스트 가져오기"
+      description: "taskId에 해당하는 주문 리스트 가져오기"
+      tags:
+        - order
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+    delete:
+      summary: "주문 삭제하기"
+      description: "주문 삭제하기"
+      tags:
+        - order
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean

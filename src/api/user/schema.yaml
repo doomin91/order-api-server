@@ -1,0 +1,40 @@
+paths:
+  /api/user/:
+    post:
+      summary: "회원정보 인증하기"
+      description: "회원정보 인증하기"
+      tags:
+        - user
+      required:
+        - phone
+      properties:
+        phone:
+          type: string
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+
+  /api/user/me:
+    get:
+      summary: "내 정보"
+      description: "내 정보"
+      tags:
+        - user
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+  

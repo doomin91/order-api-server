@@ -14,26 +14,42 @@
 매 번 재실행하는 것은 고역입니다. 따라서 수정 시 갱신하도록 nodemon 라이브러리를 추가하였습니다.
 
 # Basic authentication
+별도의 아이디어가 없습니다.
+
 기본 인증은 기존과 같이 JWT를 활용한 Access Token, Refresh Token을 발급하여 진행합니다.
 최초 전화번호를 입력하는 경우(인증받는 경우) Access Token을 발급하여 주고, 기한이 지난 경우 Refresh Token을 발급하게 합니다.
 
 # API token
-Bareer 인증방식을 사용하려고 합니다.
+별도의 아이디어가 없습니다.
 
 # Request format
 프론트에서의 요청 값은 기본적으로 JSON으로 진행합니다.
 XML, TEXT, PARAMETER 등으로도 진행 할 수 있으나, 최근 프론트엔드 프레임워크 Vue, React 등의 경우 JSON으로 작업하기가
 가장 용이하다고 판단되어 JSON을 선택했습니다.
 
+각 요청값은 다르게 들어올 수 있습니다. 보통 싱글 프로세스로 서버를 운영하게 되는 express의 경우 예외처리가 잘못되면
+서버가 종료 될 가능성이 존재하므로 최대한 형식에 맞는 값을 받고자 합니다.
+이에 유용한 라이브러리인 express-validate를 활용하려고 합니다.
+
 # Response format
 위 사항과 마찬가지로 JSON 형태로 작업하였습니다.
 
 # DB Structure
-DB구조는 sqlite를 사용해야 하므로 RDB를 이용하려고 합니다.
+과제 특성상 SQLite3를 사용했으므로, 현재 샘플데이터(JSON) 형식으로 생성 및 삭제하기가 쉽지 않을 것으로 판단됩니다.
+조회와 검색을 용이하게 하기 위해 Order의 경우는 Infomation, Mission, Mission이 가지는 아이템 리스트로 테이블을 나누어 저장하고
+Relation을 통해 데이터를 조합해 JSON 형태로 프론트에 전달 할 계획을 가지고 구성했습니다.
 
 # API Specifications
-API 명세서는 Postman과 같은 강력한 툴을 사용하더라도 매 번 갱신한다는 일이 쉽지 않습니다.
+http(s)://{server_ip}/api-docs 에서 API 명세서를 확인 할 수 있습니다.
+예) http://localhost/api-docs
+
+API 명세서는 Postman과 같은 강력한 툴을 사용하더라도 매 번 수동으로 갱신한다는 일이 쉽지 않습니다.
+
 이에 Swagger와 같은 자동 문서화가 되는 라이브러리를 사용하여 매 번 최신화된 명세서를 전달하려고 합니다.
+현재 프로젝트는 MSA 개발 방식을 따르고 있는 것으로 보여, schema와 route를 하나의 폴더에 넣고 개발하는 것보다는
+api 내의 각 모듈별로 schema를 가지는게 좋겠다고 판단하였습니다.
 
+모듈 내에 schema.ymal를 swagger 형식에 맞게 입력하면 자동으로 문서화가 되는 개념으로 진행했습니다.
 
-better-sql3는 완전 동기화이므로 rdb를 쓰게 된다면 mysql2 등의 모듈을 통해 promise 비동기화를 진행할 것 같다.
+# 시간이 있다면... 향후 변경사항
+better-sql3는 완전 동기화이므로 동기화 처리가 가능한 RDB 또는 NoSql을 활용하고자 합니다.
