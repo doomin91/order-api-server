@@ -27,7 +27,6 @@ export default class UserComponent {
   }
   signUp = (req,res) => {
     const { phone } = req.body;
-    console.log(req.body)
     if(!phone){
       throw new BadRequestException('전화번호를 알려주세요');
     }
@@ -36,7 +35,7 @@ export default class UserComponent {
       this.getService().insertUser(phone);
       user = this.getService().findUserByPhone(phone);
     }
-    let token = signing(user.UUID);
+    let token = signing( user );
     return { token };
   }
 

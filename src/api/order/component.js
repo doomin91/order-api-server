@@ -23,7 +23,8 @@ export default class OrderComponent {
     router
     .get('/', successWrapper(this.orderList))
     .get('/:taskId', successWrapper(this.findOrder))
-    .post('/', successWrapper(this.register))
+    .post('/', successWrapper(this.registerOrder))
+    .delete('/:taskId', successWrapper(this.deleteOrder))
     this.router.use(path, router);
   }
 
@@ -31,8 +32,14 @@ export default class OrderComponent {
    * @description 고객의 주문 리스트를 가져온다.
    */
   orderList = (req,res) => {
-    const { UUID } = req.Order;
-    return UUID
+    const { UUID } = req.user;
+    console.log(req)
+    
+    let result = this.getService().findOrder(UUID)
+    console.log(result)
+    res.status(200).json(result)
+
+    
     //TODO API 셋팅 해주세요
     /**
      * @example
@@ -44,7 +51,7 @@ export default class OrderComponent {
    * @description taskId로 주문을 가져온다.
    */
   findOrder = (req,res) => {
-    const { UUID } = req.Order;
+    const { UUID } = req.user;
     const { taskId } = req.params;
     //TODO API 셋팅 해주세요
     /******************************/
@@ -57,7 +64,7 @@ export default class OrderComponent {
   /**
    * @description 주문을 등록한다.
    */
-  register = (req, res) => {
+  registerOrder = (req, res) => {
     const { UUID } = req.user;
     const data = req.body
     let warnMessage
@@ -81,7 +88,15 @@ export default class OrderComponent {
     console.log(warnMessage)
 
     let result = this.getService().insertOrder(UUID, data)
-    res.status(201).json(result)
+    res.status(200).json(result)
+  }
+
+  deleteOrder = (req, res) => {
+    const { UUID } = req.user;
+    const taskId = req.params.taskId
+
+    let result = this.getService().deleteOrder(UUID, taskId)
+    res.status(200).json(result)
   }
 
 }

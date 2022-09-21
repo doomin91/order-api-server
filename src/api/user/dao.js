@@ -13,11 +13,16 @@ export default class Dao {
   createTable = () => {
     let sql = `DROP TABLE IF EXISTS ${this.tableName};`;
     database.exec(sql);
-    sql = `CREATE TABLE IF NOT EXISTS ${this.tableName} (phone varchar(11), UUID varchar(100))`
+    sql = `CREATE TABLE IF NOT EXISTS ${this.tableName} (id integer primary key autoincrement,
+                                                        phone varchar(11), 
+                                                        UUID varchar(100),
+                                                        refresh_token varchar(200),
+                                                        reg_date timestamp default CURRENT_TIMESTAMP
+                                                        )`
     database.exec(sql);
   }
 
-  insertUser = (UUID,phone) => {
+  insertUser = (UUID, phone) => {
     const queue = database.prepare(`INSERT INTO ${this.tableName} (phone,UUID) VALUES (?,?)`);
     let result = queue.run(phone,UUID);
   }

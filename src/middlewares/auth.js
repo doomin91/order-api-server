@@ -46,4 +46,4 @@ export const verifyJWT = (req, res, next) => {
     );
   }
 };
-export const signing = (UUID) => sign({ UUID });
+export const signing = (payload, option) => sign(payload, option);
