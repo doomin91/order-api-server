@@ -5,6 +5,20 @@ export default class OrderService {
     this.dao = dao;
   }
 
+  findOrder(phone){
+    const UUID = uuidv4();
+    console.log(UUID)
+    return this.dao.findOrder(UUID)
+  }
+
+  findOrderById(taskId){
+    return this.dao.getOrderById(UUID, taskId)
+  }
+
+  deleteOrder(taskId){
+    return this.dao.deleteOrder(UUID, taskId)
+  }
+
   insertOrder(data) {
     const UUID = uuidv4();
     return this.dao.insertOrder(UUID, data);

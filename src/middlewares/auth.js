@@ -1,6 +1,6 @@
 import InvalidAuthorizedTokenError from '../exceptions/invalidAuthorizedTokenException';
 import { verify, sign } from '../libs/jwt.js';
-const bypassPathList = ['/login', '/', 
+const bypassPathList = ['/login', '/', '/api/user', 
       '/api-docs', 
       '/api-docs/', 
       '/api-docs/swagger-ui.css',
@@ -35,7 +35,6 @@ export const verifyJWT = (req, res, next) => {
       const { path } = req;
       const found = bypassPathList.find((p) => p === path);
       if (!found) {
-        console.log(path)
         throw new Error();
       }
     }
@@ -46,4 +45,4 @@ export const verifyJWT = (req, res, next) => {
     );
   }
 };
-export const signing = (UUID) => sign({ UUID });
+export const signing = (payload, option) => sign(payload, option);
