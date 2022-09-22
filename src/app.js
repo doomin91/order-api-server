@@ -38,6 +38,10 @@ class App {
       res.send('OK')
     });
 
+    this.app.get('/login', (req, res) => {
+      res.send('OK')
+    });
+
     // 각 API의 Component.js에 설정된 Router 하위 설정을 가져온다.
     controllers.forEach((controller) => {
       router.use(controller.router);

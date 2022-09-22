@@ -19,12 +19,15 @@ paths:
           schema:
             type: object
             required:
+              - phone
               - pickup
               - pickupEnd
               - delivery
               - deliveryEnd
               - address_01
             properties:
+              phone:
+                type: string
               pickup:
                 type: string
               pickupEnd:
@@ -113,6 +116,100 @@ paths:
           schema:
             type: string
         - name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - order
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+  /api/order/{taskId}/mission:
+    post:
+      summary: "taskId에 해당하는 주문의 미션 리스트 작성"
+      description: "taskId에 해당하는 주문의 미션 리스트 작성"
+      parameters:
+        - name: x-access-token
+          in: header
+          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
+          description: Access Token
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: requestBody
+          required: true
+          in: body
+          schema:
+            type: object
+            required:
+              - name
+              - userMessage
+              - tagList
+              - representativeItemImage
+              - imageList
+            properties:
+              name:
+                type: string
+              userMessage:
+                type: string
+              tagList:
+                type: array
+                items:
+                  type: string
+              representativeItemImage:
+                type: string
+              imageList:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    imageId:
+                      type: string
+                    imageUrl:
+                      type: string
+      tags:
+        - order
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+  /api/order/{taskId}/mission/{missionId}:
+    delete:
+      summary: "미션 삭제하기"
+      description: "미션 삭제하기"
+      parameters:
+        - name: x-access-token
+          in: header
+          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
+          description: Access Token
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: missionId
           in: path
           required: true
           schema:

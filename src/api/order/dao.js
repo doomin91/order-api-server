@@ -12,6 +12,7 @@ export default class Dao {
     let sql = `DROP TABLE IF EXISTS ${this.tableName}_information;`;
     database.exec(sql);
     sql = `CREATE TABLE IF NOT EXISTS ${this.tableName}_information (id integer primary key autoincrement, 
+                                                        UUID varchar(50) not null,
                                                         phone varchar(20) not null,
                                                         pickup datetime,
                                                         pickup_end datetime,
@@ -57,40 +58,39 @@ export default class Dao {
     database.exec(sql);
   }
 
-  findOrder = (phone) => {
-    let queue = database.prepare(`SELECT * FROM ${this.tableName}_information WHERE phone = ? and del_yn = 'n';`);
-    let result = queue.get(phone);
-    console.log(result)
+  orderList = (UUID) => {
+    let queue = database.prepare(`SELECT * FROM ${this.tableName}_information WHERE UUID = ? and del_yn = 'n';`);
+    let result = queue.all(UUID);
     return result;
   }
 
-  findOrderById = (phone, taskId) => {
-    let queue = database.prepare(`SELECT * FROM ${this.tableName}_information WHERE phone = ? and id = ? del_yn = 'n'`);
+  findOrderById = (UUID, taskId) => {
+    let queue = database.prepare(`SELECT * FROM ${this.tableName}_information WHERE UUID = ? and id = ? and del_yn = 'n'`);
     let result = queue.get(UUID, taskId);
     return result;
   }
 
-  deleteOrder = (phone, taskId) => {
-    let queue = database.prepare(`UPDATE ${this.tableName}_information SET del_yn = 'y' WHERE phone = ? and id = ?`);
+  deleteOrder = (UUID, taskId) => {
+    let queue = database.prepare(`UPDATE ${this.tableName}_information SET del_yn = 'y' where UUID = ? and id = ?`);
     let result = queue.run(UUID, taskId);
     return result;
   }
 
-  insertOrder = (phone, data) => {
-    const queue = database.prepare(`INSERT INTO ${this.tableName}_information (phone, pickup, pickup_end, delivery, delivery_end, address_01, address_02) VALUES (
-      ?, ?, ?, ?, ?, ?, ?)`);
-    let result = queue.run(phone, 1, 2, 3, 4, 5, 6)
+  insertOrder = (UUID, data) => {
+    const queue = database.prepare(`INSERT INTO ${this.tableName}_information (UUID, phone, pickup, pickup_end, delivery, delivery_end, address_01, address_02, location) VALUES (
+      ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+    let result = queue.run(UUID, data.phone, data.pickup, data.pickupEnd, data.delivery, data.deliveryEnd, data.address_01, data.address_02, data.location)
     return result
   }
 
-  findMission = (orderId) => {
-    let queue = database.prepare(`SELECT * FROM ${this.tableName}_mission WHERE order_id = ?;`);
-    let result = queue.get(orderId);
+  insertMission = (orderId, data) => {
+    const queue = database.prepare(`INSERT INTO ${this.tableName}_mission (order_id, name, user_message, tag_list, representative_item_image) VALUES (?, ?, ?, ?, ?)`)
+    let result = queue.run(orderId, data.name, data.userMessage, data.tagList, data.representativeItemImage);
     return result;
   }
 
-  findMissionItem = (missionId) => {
-    let queue = database.prepare(`SELECT * FROM ${this.tableName}_mission_item_list WHERE order_id = ?;`);
+  deleteMission = (missionId) => {
+    let queue = database.prepare(`INSERT * FROM ${this.tableName}_mission_item_list WHERE order_id = ?;`);
     let result = queue.get(missionId);
     return result;
   }

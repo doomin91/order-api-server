@@ -1,6 +1,6 @@
 import InvalidAuthorizedTokenError from '../exceptions/invalidAuthorizedTokenException';
 import { verify, sign } from '../libs/jwt.js';
-const bypassPathList = ['/login', '/', '/api/user', 
+const bypassPathList = ['/login', '/', '/api/user/', 
       '/api-docs', 
       '/api-docs/', 
       '/api-docs/swagger-ui.css',

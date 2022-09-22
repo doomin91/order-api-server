@@ -25,7 +25,9 @@ export default class OrderComponent {
     .get('/:taskId', successWrapper(this.findOrder))
     .post('/', successWrapper(this.registerOrder))
     .delete('/:taskId', successWrapper(this.deleteOrder))
-    this.router.use(path, router);
+    .post('/:taskId/mission', successWrapper(this.registerMission))
+    .delete('/:taskId/mission/:missionId', successWrapper(this.deleteMission))
+    this.router.use(path, router)
   }
 
   /**
@@ -33,18 +35,9 @@ export default class OrderComponent {
    */
   orderList = (req,res) => {
     const { UUID } = req.user;
-    console.log(req)
     
-    let result = this.getService().findOrder(UUID)
-    console.log(result)
-    res.status(200).json(result)
-
-    
-    //TODO API 셋팅 해주세요
-    /**
-     * @example
-     * https://s3.ap-northeast-2.amazonaws.com/com.washswat.assets/dev/rn.json
-     */
+    let result = this.getService().orderList(UUID)
+    return result
   }
 
   /**
@@ -53,12 +46,8 @@ export default class OrderComponent {
   findOrder = (req,res) => {
     const { UUID } = req.user;
     const { taskId } = req.params;
-    //TODO API 셋팅 해주세요
-    /******************************/
-    /**
-     * @example
-     * https://s3.ap-northeast-2.amazonaws.com/com.washswat.assets/dev/rn.json
-     */
+    let result = this.getService().findOrderById(UUID, taskId)
+    return result
   }
 
   /**
@@ -67,36 +56,76 @@ export default class OrderComponent {
   registerOrder = (req, res) => {
     const { UUID } = req.user;
     const data = req.body
-    let warnMessage
+    let returnMessage
+
+    if(req.body.phone == ""){
+      returnMessage = "부재시 연락 받을 연락처를 입력해주세요."
+    }
 
     if(req.body.pickup == ""){
-      warnMessage = "픽업을 원하는 날짜와 시간을 입력해주세요."
+      returnMessage = "픽업을 원하는 날짜와 시간을 입력해주세요."
     }
 
     if(req.body.delivery == ""){
-      warnMessage = "배달을 원하는 날짜와 시간을 입력해주세요."
+      returnMessage = "배달을 원하는 날짜와 시간을 입력해주세요."
     }
 
     if(req.body.address_01 == ""){
-      warnMessage = "주소를 입력해주세요.";
+      returnMessage = "주소를 입력해주세요.";
     }
     
     if(req.body.address_01 == ""){
-      warnMessage = "상세 주소를 입력해주세요."
+      returnMessage = "상세 주소를 입력해주세요."
     }
 
-    console.log(warnMessage)
+    console.log(returnMessage)
 
     let result = this.getService().insertOrder(UUID, data)
-    res.status(200).json(result)
+    return result
   }
 
   deleteOrder = (req, res) => {
     const { UUID } = req.user;
-    const taskId = req.params.taskId
+    const { taskId } = req.params
 
     let result = this.getService().deleteOrder(UUID, taskId)
     res.status(200).json(result)
+  }
+
+  registerMission = (req, res) => {
+    const { UUID } = req.user;
+    const { taskId } = req.params
+    const data = req.body
+    let result, returnMessage
+    const checkTaskId = this.getService().findOrderById(UUID, taskId)
+    if(checkTaskId){
+      result = this.getService().insertMission(taskId, data)
+      
+      if(result){
+        returnMessage = {
+          'code': 200,
+          'message': '정상적으로 등록되었습니다.'
+        } 
+      } else {
+          returnMessage = {
+          'code': 200,
+          'message': '등록과정에서 문제가 발생했습니다.'
+        }
+      }
+    } else {  
+      returnMessage = {
+        'code': 200,
+        'message': '등록된 주문이 없거나 권한이 없습니다.'
+      }
+    }
+    return returnMessage
+  }
+
+  deleteMission = (req, res) => {
+    const { UUID } = req.user;
+
+    let result = this.getService().deleteMission(UUID, taskId, missionId)
+    return result
   }
 
 }

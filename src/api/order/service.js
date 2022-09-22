@@ -5,32 +5,27 @@ export default class OrderService {
     this.dao = dao;
   }
 
-  findOrder(phone){
-    const UUID = uuidv4();
-    console.log(UUID)
-    return this.dao.findOrder(UUID)
+  orderList(UUID){
+    return this.dao.orderList(UUID)
   }
 
-  findOrderById(taskId){
-    return this.dao.getOrderById(UUID, taskId)
+  findOrderById(UUID, taskId){
+    return this.dao.findOrderById(UUID, taskId)
   }
 
-  deleteOrder(taskId){
+  deleteOrder(UUID, taskId){
     return this.dao.deleteOrder(UUID, taskId)
   }
 
-  insertOrder(data) {
-    const UUID = uuidv4();
+  insertOrder(UUID, data) {
     return this.dao.insertOrder(UUID, data);
   }
 
-  insertMission(phone) {
-    const UUID = uuidv4();
-    return this.dao.insertMission(UUID, phone);
+  insertMission(taskId, data) {
+    return this.dao.insertMission(taskId, data);
   }
 
-  insertMissionItem(phone) {
-    const UUID = uuidv4();
-    return this.dao.insertMissionItem(UUID, phone);
+  deleteMission(UUID, missionId) {
+    return this.dao.deleteMission(UUID, missionId);
   }
 }
