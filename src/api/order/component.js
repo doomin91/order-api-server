@@ -27,6 +27,8 @@ export default class OrderComponent {
     .delete('/:taskId', successWrapper(this.deleteOrder))
     .post('/:taskId/mission', successWrapper(this.registerMission))
     .delete('/:taskId/mission/:missionId', successWrapper(this.deleteMission))
+    .post('/:taskId/mission/:missionId/image', successWrapper(this.registerMissionImage))
+    .delete('/:taskId/mission/:missionId/image/:imageId', successWrapper(this.deleteMissionImage))
     this.router.use(path, router)
   }
 
@@ -35,8 +37,29 @@ export default class OrderComponent {
    */
   orderList = (req,res) => {
     const { UUID } = req.user;
-    
-    let result = this.getService().orderList(UUID)
+    const result = []
+    const orderList = this.getService().orderList(UUID)
+
+    orderList.forEach( (order) => {
+      let orderSchema = {}
+      orderSchema.taskId = order.id
+      orderSchema.information = order
+      orderSchema.mission = []
+      const missionList = this.getService().findMissionByTaskId(UUID, order.id)
+      missionList.forEach( (mission) => {
+        mission.items = []
+        let imageList = this.getService().findMissionImageByMissionId(UUID, mission.id)
+        imageList.forEach( (image) => {
+          let imageSchema = {
+            'image_id' : image.id,
+            'image_url' : image.image_url
+          }
+          mission.items.push(imageSchema)
+        })
+        orderSchema.mission.push(mission)
+      })
+      result.push(orderSchema)
+    }) 
     return result
   }
 
@@ -78,8 +101,6 @@ export default class OrderComponent {
       returnMessage = "상세 주소를 입력해주세요."
     }
 
-    console.log(returnMessage)
-
     let result = this.getService().insertOrder(UUID, data)
     return result
   }
@@ -99,7 +120,7 @@ export default class OrderComponent {
     let result, returnMessage
     const checkTaskId = this.getService().findOrderById(UUID, taskId)
     if(checkTaskId){
-      result = this.getService().insertMission(taskId, data)
+      result = this.getService().insertMission(UUID, taskId, data)
       
       if(result){
         returnMessage = {
@@ -109,7 +130,7 @@ export default class OrderComponent {
       } else {
           returnMessage = {
           'code': 200,
-          'message': '등록과정에서 문제가 발생했습니다.'
+          'message': '등록 과정에서 문제가 발생했습니다.'
         }
       }
     } else {  
@@ -128,4 +149,20 @@ export default class OrderComponent {
     return result
   }
 
+  registerMissionImage = (req, res) => {
+    const { UUID } = req.user;
+    const { taskId, missionId } = req.params
+    const data = req.body
+
+    const result = this.getService().insertMissionImage(UUID, taskId, missionId, data)
+    return result
+  }
+
+  deleteMissionImage = (req, res) => {
+    const { UUID } = req.user;
+    const { taskId, missionId, imageId } = req.params
+
+    let result = this.getService().deleteMissionImage(UUID, taskId, missionId, imageId)
+    return result
+  }
 }

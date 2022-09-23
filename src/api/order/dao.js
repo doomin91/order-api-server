@@ -32,6 +32,7 @@ export default class Dao {
     let sql = `DROP TABLE IF EXISTS ${this.tableName}_mission;`;
     database.exec(sql);
     sql = `CREATE TABLE IF NOT EXISTS ${this.tableName}_mission (id integer primary key autoincrement, 
+                                                        UUID varchar(50) not null,
                                                         order_id integer,
                                                         name varchar(30) not null,
                                                         user_message varchar(200),
@@ -48,8 +49,9 @@ export default class Dao {
     let sql = `DROP TABLE IF EXISTS ${this.tableName}_mission_item_image;`;
     database.exec(sql);
     sql = `CREATE TABLE IF NOT EXISTS ${this.tableName}_mission_item_image (id integer primary key autoincrement, 
+                                                        UUID varchar(50) not null,
+                                                        order_id integer,
                                                         mission_id integer,
-                                                        image_id varchar(24) not null,
                                                         image_url varchar(300) not null,
                                                         del_yn char(1) default 'n',
                                                         mod_date timestamp,
@@ -59,7 +61,8 @@ export default class Dao {
   }
 
   orderList = (UUID) => {
-    let queue = database.prepare(`SELECT * FROM ${this.tableName}_information WHERE UUID = ? and del_yn = 'n';`);
+    let queue = database.prepare(`
+    SELECT * FROM ${this.tableName}_information WHERE UUID = ? and del_yn = 'n';`);
     let result = queue.all(UUID);
     return result;
   }
@@ -83,15 +86,40 @@ export default class Dao {
     return result
   }
 
-  insertMission = (orderId, data) => {
-    const queue = database.prepare(`INSERT INTO ${this.tableName}_mission (order_id, name, user_message, tag_list, representative_item_image) VALUES (?, ?, ?, ?, ?)`)
-    let result = queue.run(orderId, data.name, data.userMessage, data.tagList, data.representativeItemImage);
+  findMissionByTaskId = (UUID, taskId) => {
+    let queue = database.prepare(`SELECT * FROM ${this.tableName}_mission WHERE UUID = ? and order_id = ? and del_yn = 'n'`);
+    let result = queue.all(UUID, taskId);
+    return result
+  }
+
+  insertMission = (UUID, taskId, data) => {
+    const queue = database.prepare(`INSERT INTO ${this.tableName}_mission (UUID, order_id, name, user_message, tag_list, representative_item_image) VALUES (?, ?, ?, ?, ?, ?)`)
+    let result = queue.run(UUID, taskId, data.name, data.userMessage, data.tagList, data.representativeItemImage);
     return result;
   }
 
-  deleteMission = (missionId) => {
-    let queue = database.prepare(`INSERT * FROM ${this.tableName}_mission_item_list WHERE order_id = ?;`);
-    let result = queue.get(missionId);
+  deleteMission = (UUID, taskId, missionId) => {
+    let queue = database.prepare(`UPDATE ${this.tableName}_mission SET del_yn = 'y' where UUID = ? and order_id = ? and id = ?`);
+    let result = queue.run(UUID, taskId, missionId);
+    return result;
+  }
+
+  findMissionImageByMissionId = (UUID, missionId) => {
+    let queue = database.prepare(`SELECT * FROM ${this.tableName}_mission_item_image WHERE UUID = ? and mission_id = ? and del_yn = 'n'`);
+    let result = queue.all(UUID, missionId);
+    return result
+  }
+
+  insertMissionImage = (UUID, taskId, missionId, data) => {
+    console.log(UUID, taskId, missionId, data)
+    const queue = database.prepare(`INSERT INTO ${this.tableName}_mission_item_image (UUID, order_id, mission_id, image_url) VALUES (?, ?, ?, ?)`)
+    let result = queue.run(UUID, taskId, missionId, data.imageURL);
+    return result;
+  }
+
+  deleteMissionImage = (UUID, taskId, missionId, imageId) => {
+    let queue = database.prepare(`UPDATE ${this.tableName}_mission_item_image SET del_yn = 'y' where UUID = ? and order_id = ? and mission_id = ? and id = ?`);
+    let result = queue.run(UUID, taskId, missionId, imageId);
     return result;
   }
 

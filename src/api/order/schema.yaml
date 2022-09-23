@@ -8,7 +8,6 @@ paths:
       parameters:
         - name: x-access-token
           in: header
-          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
           description: Access Token
           required: true
           schema:
@@ -58,7 +57,6 @@ paths:
       parameters:
         - name: x-access-token
           in: header
-          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
           description: Access Token
           required: true
           schema:
@@ -82,7 +80,6 @@ paths:
       parameters:
         - name: x-access-token
           in: header
-          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
           description: Access Token
           required: true
           schema:
@@ -110,7 +107,6 @@ paths:
       parameters:
         - name: x-access-token
           in: header
-          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
           description: Access Token
           required: true
           schema:
@@ -139,7 +135,6 @@ paths:
       parameters:
         - name: x-access-token
           in: header
-          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
           description: Access Token
           required: true
           schema:
@@ -199,7 +194,6 @@ paths:
       parameters:
         - name: x-access-token
           in: header
-          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
           description: Access Token
           required: true
           schema:
@@ -210,6 +204,87 @@ paths:
           schema:
             type: integer
         - name: missionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - order
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+  /api/order/{taskId}/mission/{missionId}/image:
+    post:
+      summary: "missionId에 image 등록"
+      description: "missionId에 image 등록"
+      parameters:
+        - name: x-access-token
+          in: header
+          description: Access Token
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: missionId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: requestBody
+          required: true
+          in: body
+          schema:
+            type: object
+            required:
+              - imageURL
+            properties:
+              imageURL:
+                type: string
+      tags:
+        - order
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+  /api/order/{taskId}/mission/{missionId}/image/{imageId}:
+    delete:
+      summary: "미션 삭제하기"
+      description: "미션 삭제하기"
+      parameters:
+        - name: x-access-token
+          in: header
+          description: Access Token
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: missionId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: imageId
           in: path
           required: true
           schema:

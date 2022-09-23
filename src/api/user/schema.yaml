@@ -35,7 +35,6 @@ paths:
       parameters:
         - name: x-access-token
           in: header
-          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiM2QzN2NmMTQtNzllMS00NmM2LTg5YzYtMjJjZGEwYzkxMDAwIiwiaWF0IjoxNjYzNzYxNjU4LCJleHAiOjE2NjM4NDgwNTh9.PthXD0AACsczBpeBg83hObQSIDAx0SRRMzVRkOqmko4
           description: Access Token
           required: true
           schema:
