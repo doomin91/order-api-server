@@ -1,34 +1,25 @@
 import { Router } from 'express';
-import successWrapper from '../../libs/success';
 import BadRequestException from '../../exceptions/badRequestException';
 import { signing } from '../../middlewares/auth';
 
+import OrderRoute from './route'
 import OrderService from './service';
 import Dao from './dao';
 
 export default class OrderComponent {
   router = Router();
   service = new OrderService(new Dao());
-
+  route = new OrderRoute(this);
   getService(){
     return this.service;
   }
 
   constructor () {
-    this.initializeRouter();
+    this.getRouter();
   }
-  initializeRouter(){
-    const router = Router();
-    const path = '/order';
-    router
-    .get('/', successWrapper(this.orderList))
-    .get('/:taskId', successWrapper(this.findOrder))
-    .post('/', successWrapper(this.registerOrder))
-    .delete('/:taskId', successWrapper(this.deleteOrder))
-    .post('/:taskId/mission', successWrapper(this.registerMission))
-    .delete('/:taskId/mission/:missionId', successWrapper(this.deleteMission))
-    .post('/:taskId/mission/:missionId/image', successWrapper(this.registerMissionImage))
-    .delete('/:taskId/mission/:missionId/image/:imageId', successWrapper(this.deleteMissionImage))
+
+  getRouter(){
+    const { path, router } = this.route.initializeRouter()
     this.router.use(path, router)
   }
 
@@ -66,7 +57,7 @@ export default class OrderComponent {
   /**
    * @description taskId로 주문을 가져온다.
    */
-  findOrder = (req,res) => {
+  findOrder = (req, res) => {
     const { UUID } = req.user;
     const { taskId } = req.params;
     let result = this.getService().findOrderById(UUID, taskId)
@@ -79,26 +70,25 @@ export default class OrderComponent {
   registerOrder = (req, res) => {
     const { UUID } = req.user;
     const data = req.body
-    let returnMessage
 
-    if(req.body.phone == ""){
-      returnMessage = "부재시 연락 받을 연락처를 입력해주세요."
+    if(!req.body.phone){
+      throw new BadRequestException('부재시 연락 받을 연락처를 입력해주세요.');
     }
 
-    if(req.body.pickup == ""){
-      returnMessage = "픽업을 원하는 날짜와 시간을 입력해주세요."
+    if(!req.body.pickup){
+      throw new BadRequestException('픽업을 원하는 날짜와 시간을 입력해주세요');
     }
 
-    if(req.body.delivery == ""){
-      returnMessage = "배달을 원하는 날짜와 시간을 입력해주세요."
+    if(!req.body.delivery){
+      throw new BadRequestException('배달을 원하는 날짜와 시간을 입력해주세요');
     }
 
-    if(req.body.address_01 == ""){
-      returnMessage = "주소를 입력해주세요.";
+    if(!req.body.address_01){
+      throw new BadRequestException('주소를 입력해주세요.');
     }
     
-    if(req.body.address_01 == ""){
-      returnMessage = "상세 주소를 입력해주세요."
+    if(!req.body.address_01){
+      throw new BadRequestException('상세 주소를 입력해주세요');
     }
 
     let result = this.getService().insertOrder(UUID, data)

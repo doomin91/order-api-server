@@ -1,30 +1,30 @@
 import { Router } from 'express';
-import successWrapper from '../../libs/success';
 import BadRequestException from '../../exceptions/badRequestException';
 import { signing } from '../../middlewares/auth';
 
+import UserRoute from './route';
 import UserService from './service';
 import Dao from './dao';
 
 export default class UserComponent {
   router = Router();
   service = new UserService(new Dao());
+  route = new UserRoute(this);
 
   getService(){
     return this.service;
   }
 
   constructor () {
-    this.initializeRouter();
+    this.getRouter();
   }
-  initializeRouter(){
-    const router = Router();
-    const path = '/user';
-    router
-    .post('/', successWrapper(this.signUp))
-    .get('/me', successWrapper(this.me))
+
+  getRouter(){
+    const { path, router } = this.route.initializeRouter()
+    console.log(router)
     this.router.use(path, router);
   }
+
   signUp = (req,res) => {
     const { phone } = req.body;
     if(!phone){
