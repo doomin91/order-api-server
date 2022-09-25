@@ -5,9 +5,9 @@ const options = {
   swaggerDefinition: {
     info: {
       version: "1.0.0",
-      title: "오더 관리 API 모듈",
+      title: "의류상품 관리 API 모듈",
       description:
-        "Description : 오더 관리 API 모듈",
+        "Description : 의류상품 관리 API 모듈",
     },
     servers: [
       {

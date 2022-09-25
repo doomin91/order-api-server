@@ -154,7 +154,6 @@ paths:
               - userMessage
               - tagList
               - representativeItemImage
-              - imageList
             properties:
               name:
                 type: string
@@ -166,15 +165,6 @@ paths:
                   type: string
               representativeItemImage:
                 type: string
-              imageList:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    imageId:
-                      type: string
-                    imageUrl:
-                      type: string
       tags:
         - order
       responses:

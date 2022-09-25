@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import BadRequestException from '../../exceptions/badRequestException';
-import { signing } from '../../middlewares/auth';
 
 import OrderRoute from './route'
 import OrderService from './service';
@@ -19,8 +18,8 @@ export default class OrderComponent {
   }
 
   getRouter(){
-    const { path, router } = this.route.initializeRouter()
-    this.router.use(path, router)
+    const { path, router } = this.route.initializeRouter();
+    this.router.use(path, router);
   }
 
   /**
@@ -28,30 +27,30 @@ export default class OrderComponent {
    */
   orderList = (req,res) => {
     const { UUID } = req.user;
-    const result = []
-    const orderList = this.getService().orderList(UUID)
+    const result = [];
 
+    const orderList = this.getService().orderList(UUID);
     orderList.forEach( (order) => {
-      let orderSchema = {}
-      orderSchema.taskId = order.id
-      orderSchema.information = order
-      orderSchema.mission = []
-      const missionList = this.getService().findMissionByTaskId(UUID, order.id)
+      let orderSchema = {};
+      orderSchema.taskId = order.id;
+      orderSchema.information = order;
+      orderSchema.mission = [];
+      const missionList = this.getService().findMissionByTaskId(UUID, order.id);
       missionList.forEach( (mission) => {
-        mission.items = []
-        let imageList = this.getService().findMissionImageByMissionId(UUID, mission.id)
+        mission.items = [];
+        const imageList = this.getService().findMissionImageByMissionId(UUID, mission.id);
         imageList.forEach( (image) => {
           let imageSchema = {
             'image_id' : image.id,
             'image_url' : image.image_url
           }
-          mission.items.push(imageSchema)
+          mission.items.push(imageSchema);
         })
-        orderSchema.mission.push(mission)
+        orderSchema.mission.push(mission);
       })
-      result.push(orderSchema)
+      result.push(orderSchema);
     }) 
-    return result
+    return result;
   }
 
   /**
@@ -60,8 +59,27 @@ export default class OrderComponent {
   findOrder = (req, res) => {
     const { UUID } = req.user;
     const { taskId } = req.params;
-    let result = this.getService().findOrderById(UUID, taskId)
-    return result
+
+    const order = this.getService().findOrderById(UUID, taskId);
+    let orderSchema = {};
+    orderSchema.taskId = order.id;
+    orderSchema.information = order;
+    orderSchema.mission = [];
+    const missionList = this.getService().findMissionByTaskId(UUID, order.id);
+    missionList.forEach( (mission) => {
+      mission.items = [];
+      const imageList = this.getService().findMissionImageByMissionId(UUID, mission.id);
+      imageList.forEach( (image) => {
+        let imageSchema = {
+          'image_id' : image.id,
+          'image_url' : image.image_url
+        }
+        mission.items.push(imageSchema);
+      })
+      orderSchema.mission.push(mission);
+    })
+    const result = orderSchema;
+    return result;
   }
 
   /**
@@ -69,30 +87,31 @@ export default class OrderComponent {
    */
   registerOrder = (req, res) => {
     const { UUID } = req.user;
-    const data = req.body
-
+    const data = req.body;
+    
     if(!req.body.phone){
       throw new BadRequestException('부재시 연락 받을 연락처를 입력해주세요.');
     }
 
     if(!req.body.pickup){
-      throw new BadRequestException('픽업을 원하는 날짜와 시간을 입력해주세요');
+      throw new BadRequestException('픽업을 원하는 날짜와 시간을 입력해주세요.');
     }
 
     if(!req.body.delivery){
-      throw new BadRequestException('배달을 원하는 날짜와 시간을 입력해주세요');
+      throw new BadRequestException('배달을 원하는 날짜와 시간을 입력해주세요.');
     }
 
     if(!req.body.address_01){
       throw new BadRequestException('주소를 입력해주세요.');
     }
     
-    if(!req.body.address_01){
+    if(!req.body.address_02){
       throw new BadRequestException('상세 주소를 입력해주세요');
     }
+    
 
-    let result = this.getService().insertOrder(UUID, data)
-    return result
+    let result = this.getService().insertOrder(UUID, data);
+    return result;
   }
 
   deleteOrder = (req, res) => {
@@ -105,31 +124,21 @@ export default class OrderComponent {
 
   registerMission = (req, res) => {
     const { UUID } = req.user;
-    const { taskId } = req.params
-    const data = req.body
-    let result, returnMessage
-    const checkTaskId = this.getService().findOrderById(UUID, taskId)
+    const { taskId } = req.params;
+    const data = req.body;
+    let result;
+    const checkTaskId = this.getService().findOrderById(UUID, taskId);
     if(checkTaskId){
-      result = this.getService().insertMission(UUID, taskId, data)
+      result = this.getService().insertMission(UUID, taskId, data);
       
       if(result){
-        returnMessage = {
-          'code': 200,
-          'message': '정상적으로 등록되었습니다.'
-        } 
+        return '정상적으로 등록되었습니다.';
       } else {
-          returnMessage = {
-          'code': 200,
-          'message': '등록 과정에서 문제가 발생했습니다.'
-        }
+          throw new BadRequestException('등록 과정에서 문제가 발생했습니다.');
       }
-    } else {  
-      returnMessage = {
-        'code': 200,
-        'message': '등록된 주문이 없거나 권한이 없습니다.'
-      }
+    } else {
+      throw new BadRequestException('등록된 주문이 없거나 권한이 없습니다.');
     }
-    return returnMessage
   }
 
   deleteMission = (req, res) => {

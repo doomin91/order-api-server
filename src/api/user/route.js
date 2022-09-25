@@ -9,8 +9,9 @@ export default class UserRoute {
   initializeRouter() {
     const router = Router();
     const path = '/user';
-    router.post ('/',   successWrapper(this.Component.signUp))
-    router.get  ('/me', successWrapper(this.Component.me))
+    router.post ('/',         successWrapper(this.Component.signUp))
+    router.get  ('/me',       successWrapper(this.Component.me))
+    router.post ('/refresh',  successWrapper(this.Component.refresh))
     return { path, router }
   }
 }

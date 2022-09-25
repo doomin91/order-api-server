@@ -16,7 +16,6 @@ export default class Dao {
     sql = `CREATE TABLE IF NOT EXISTS ${this.tableName} (id integer primary key autoincrement,
                                                         phone varchar(11), 
                                                         UUID varchar(100),
-                                                        refresh_token varchar(200),
                                                         reg_date timestamp default CURRENT_TIMESTAMP
                                                         )`
     database.exec(sql);

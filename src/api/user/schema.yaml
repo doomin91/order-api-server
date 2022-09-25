@@ -49,4 +49,28 @@ paths:
                 properties:
                   ok:
                     type: boolean
+
+  /api/user/refresh:
+    post:
+      tags:
+        - user
+      summary: "refresh token을 통해 access Token을 재발급"
+      description: "refresh token을 통해 access Token을 재발급"
+      parameters:
+        - name: refresh-token
+          in: header
+          description: refresh-token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
   
