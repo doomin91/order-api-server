@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import BadRequestException from '../../exceptions/badRequestException';
+import ValidationException from '../../exceptions/validationException';
 
+import Joi from 'joi'
 import OrderRoute from './route'
 import OrderService from './service';
 import Dao from './dao';
@@ -89,26 +91,18 @@ export default class OrderComponent {
     const { UUID } = req.user;
     const data = req.body;
     
-    if(!req.body.phone){
-      throw new BadRequestException('부재시 연락 받을 연락처를 입력해주세요.');
-    }
-
-    if(!req.body.pickup){
-      throw new BadRequestException('픽업을 원하는 날짜와 시간을 입력해주세요.');
-    }
-
-    if(!req.body.delivery){
-      throw new BadRequestException('배달을 원하는 날짜와 시간을 입력해주세요.');
-    }
-
-    if(!req.body.address_01){
-      throw new BadRequestException('주소를 입력해주세요.');
-    }
-    
-    if(!req.body.address_02){
-      throw new BadRequestException('상세 주소를 입력해주세요');
-    }
-    
+    const schema = Joi.object().keys({
+      phone       : Joi.string().max(14).pattern(/^01[0-9]-[0-9]{3,4}-[0-9]{3,4}$/).required(),
+      pickup      : Joi.date().iso().required(),
+      pickupEnd   : Joi.date().iso().empty(''),
+      delivery    : Joi.date().iso().required(),
+      deliveryEnd : Joi.date().iso().empty(''),
+      address_01  : Joi.string().max(200).required(),
+      address_02  : Joi.string().max(200),
+      location    : Joi.string().max(200).empty('')
+    })
+    const { error } = schema.validate(data, { abortEarly: false })
+    if(error) throw new ValidationException(error)
 
     let result = this.getService().insertOrder(UUID, data);
     return result;
@@ -126,6 +120,18 @@ export default class OrderComponent {
     const { UUID } = req.user;
     const { taskId } = req.params;
     const data = req.body;
+
+    const schema = Joi.object().keys({
+      name                       : Joi.string().required(),
+      userMessage                : Joi.string().empty(''),
+      tagList                    : Joi.array().empty(''),
+      representativeItemImage    : Joi.string().empty(''),
+    })
+    const { error } = schema.validate(data, { abortEarly: false })
+    if(error) {
+      throw new ValidationException(error)
+    }
+
     let result;
     const checkTaskId = this.getService().findOrderById(UUID, taskId);
     if(checkTaskId){
@@ -152,6 +158,12 @@ export default class OrderComponent {
     const { UUID } = req.user;
     const { taskId, missionId } = req.params
     const data = req.body
+
+    const schema = Joi.object().keys({
+      imageURL                   : Joi.string().required()
+    })
+    const { error } = schema.validate(data, { abortEarly: false })
+    if(error) throw new ValidationException(error)
 
     const result = this.getService().insertMissionImage(UUID, taskId, missionId, data)
     return result

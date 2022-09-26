@@ -3,6 +3,7 @@ import { refreshing, signing } from '../../middlewares/auth';
 import { verify } from '../../libs/jwt.js';
 import BadRequestException from '../../exceptions/badRequestException';
 import ExpiredTokenException from '../../exceptions/expiredTokenException';
+import ValidationException from '../../exceptions/validationException';
 
 import UserRoute from './route';
 import UserService from './service';
@@ -29,14 +30,14 @@ export default class UserComponent {
   signUp = (req, res) => {
     const { phone } = req.body;
     if(!phone){
-      throw new BadRequestException('전화번호를 알려주세요');
+      throw new ValidationException('전화번호를 알려주세요');
     }
-    const user = this.getService().findUserByPhone(phone);
+    let user = this.getService().findUserByPhone(phone);
     if(!user){
       this.getService().insertUser(phone);
       user = this.getService().findUserByPhone(phone);
     }
-
+    
     let payload = {
       'phone': user.phone,
       'UUID': user.UUID
@@ -64,13 +65,13 @@ export default class UserComponent {
 
   refresh = (req, res) => {
     const refreshToken = req.headers['refresh-token']
-    if(!refreshToken) throw new BadRequestException('발급받은 리프레쉬 토큰을 입력해주세요.');
+    if(!refreshToken) throw new ValidationException('발급받은 리프레쉬 토큰을 입력해주세요.');
       
     const token = verify(refreshToken)
     if(!token) throw new ExpiredTokenException('리프레쉬 토큰이 만료되었습니다. 재로그인해주세요.');  
     
     const user = this.getService().findUserByPhone(token.phone);
-    if(!user) throw new ExpiredTokenException('회원정보를 찾을 수 없습니다. 회원정보 인증 후 다시 시도해주세요.');  
+    if(!user) throw new BadRequestException('회원정보를 찾을 수 없습니다. 회원정보 인증 후 다시 시도해주세요.');  
     
     const payload = {
       'phone': user.phone,
